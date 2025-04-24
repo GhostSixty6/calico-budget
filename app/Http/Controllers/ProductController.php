@@ -9,43 +9,14 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreProductRequest $request)
     {
-        //
-    }
+      $product = new Product();
+      $this->setFields($request, $product);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
+      return response()->json($product, 201);
     }
 
     /**
@@ -53,7 +24,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+      $this->setFields($request, $product);
+      return response()->json($product, 201);
     }
 
     /**
@@ -61,6 +33,31 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+      $product->delete();
+      return response()->json([], 201);
+    }
+
+    /**
+     * Set the Product fields
+     */
+    private function setFields($request, Product &$product)
+    {
+      $fields = [
+        'title',
+        'shop',
+        'category',
+        'price',
+        'due',
+        'status'
+      ];
+
+      foreach ($fields as $field) {
+        if ($request->has($field)) {
+          $product->$field = $request->input($field);
+        }
+      }
+
+      $product->user_id = $request->user()->id;
+      $product->save();
     }
 }

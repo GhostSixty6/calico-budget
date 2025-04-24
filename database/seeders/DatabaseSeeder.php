@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Product;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,8 +14,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'Demo',
-            'email' => 'demo@mscode.co.za',
+            'name' => env('USER_NAME', 'demo'),
+            'email' => env('USER_NAME', 'demo'),
+            'password' => env('USER_PASS', 'demo'),
         ]);
 
         Product::factory(10)->create();

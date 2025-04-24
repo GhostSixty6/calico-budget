@@ -18,11 +18,10 @@ class ProductFactory extends Factory
     {
       return [
         'title' => fake()->unique()->randomElement(['Air Freshner', 'Bleach', 'Bovril', 'Coffee', 'Milk', 'Sugar', 'Multivitamin', 'Shampoo', 'Petrol', 'Plex', 'Youtube Premium']),
-        'notes' => '',
+        'due' => fake()->randomElement(['Now', 'Later', 'Auto']),
         'price' => fake()->randomFloat(0, 50, 1000),
         'shop' => fake()->randomElement(['Checkers', 'Dischem', 'Other']),
         'category' => fake()->randomElement(['Groceries', 'Medicine', 'Transport', 'Entertainment']),
-        'link' => '',
         'status' => fake()->randomElement([1, 0]),
         'user_id' => 1,
     ];
