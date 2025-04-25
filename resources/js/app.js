@@ -1,6 +1,7 @@
 import './bootstrap';
 import Choices from 'choices.js';
 
+// Setup default args for Choices.js
 const args = {
   addChoices: true,
   addItemFilter: (value) => !!value && value !== '',
@@ -46,77 +47,18 @@ const args = {
   },
 };
 
-
+// Enable Choices for all select fields
 document.querySelectorAll('.js-choice').forEach((element, index) => {
   new Choices(element, args);
 });
 
+// Create a new product on button click
 document.getElementById('product-create').addEventListener('click', (e) => {
-
-  fetch('/api/products', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-    body: JSON.stringify({
-      'status': 0,
-      'title': document.getElementById('title-create').value,
-      'due': document.getElementById('due-create').value,
-      'price': document.getElementById('price-create').value,
-      'shop': document.getElementById('shop-create').value,
-      'category': document.getElementById('category-create').value,
-    })
-  })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.log(response);
-        throw new Error('Product create: Failed');
-      }
-    })
-    .then(data => {
-      console.log('Product create Success:', data);
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error('Product create Error:', error);
-      console.error(error.response);
-      // handle error
-    });
+  productCreate();
 }
 );
 
-function productDelete(id) {
-  const idArray = id.split('-');
-
-  fetch('/api/products/' + idArray[1], {
-    method: 'POST',
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-      'X-HTTP-Method-Override': 'DELETE',
-    },
-  })
-    .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        console.log(response);
-        throw new Error('Product delete: Failed');
-      }
-    })
-    .then(data => {
-      console.log('Product delete Success:', data);
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error('Product delete Error:', error);
-    });
-}
-
+// attach the productDelete function to all delete buttons
 var elements = document.getElementsByClassName("product-delete");
 
 for (var i = 0; i < elements.length; i++) {
@@ -125,6 +67,7 @@ for (var i = 0; i < elements.length; i++) {
   });
 }
 
+// attach the productUpdate function to all product fields
 var elements = document.getElementsByClassName("product-field");
 
 for (var i = 0; i < elements.length; i++) {
@@ -148,11 +91,12 @@ for (var i = 0; i < elements.length; i++) {
   });
 }
 
+// attach the userUpdate function to the user income field
 document.getElementById('user-income').addEventListener('blur', function () {
   userUpdate(this.value);
 });
 
-
+// update table filters
 var urlParams = new URLSearchParams(window.location.pathname.replace(/^\//, ''));
 var elements = document.getElementsByClassName("table-filter");
 
@@ -173,8 +117,6 @@ window.onload = function () {
     }
   }
 };
-
-
 
 var shopFilter = Array.from(document.querySelectorAll("#shop-create option")).map(el => el.value);
 var shopCurrent = shopFilter[0];
@@ -231,9 +173,7 @@ for (var i = 0; i < elements.length; i++) {
   });
 }
 
-
-
-
+ // Update the product on field changes
 function productUpdate(id, value) {
   var idArray = id.split('-');
   var field = idArray[0];
@@ -271,6 +211,7 @@ function productUpdate(id, value) {
     });
 }
 
+// Update the user on income field changes
 function userUpdate(value) {
 
   fetch('/api/users', {
@@ -301,3 +242,69 @@ function userUpdate(value) {
       console.error('User update Error:', error);
     });
 } 
+
+// Delete related product on button click
+function productDelete(id) {
+  const idArray = id.split('-');
+
+  fetch('/api/products/' + idArray[1], {
+    method: 'POST',
+    headers: {
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      'X-HTTP-Method-Override': 'DELETE',
+    },
+  })
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        console.log(response);
+        throw new Error('Product delete: Failed');
+      }
+    })
+    .then(data => {
+      console.log('Product delete Success:', data);
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error('Product delete Error:', error);
+    });
+}
+
+function productCreate() {
+  
+  fetch('/api/products', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    body: JSON.stringify({
+      'status': 0,
+      'title': document.getElementById('title-create').value,
+      'due': document.getElementById('due-create').value,
+      'price': document.getElementById('price-create').value,
+      'shop': document.getElementById('shop-create').value,
+      'category': document.getElementById('category-create').value,
+    })
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.log(response);
+        throw new Error('Product create: Failed');
+      }
+    })
+    .then(data => {
+      console.log('Product create Success:', data);
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error('Product create Error:', error);
+      console.error(error.response);
+      // handle error
+    });
+}
