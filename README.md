@@ -13,6 +13,31 @@ This budget app was built to make shopping easier by listing the products that n
 
 ![image](https://i.imgur.com/0MZmjdv.png)
 
+### Installtion
+
+Clone the Repo
+```
+git clone https://github.com/GhostSixty6/calico-budget.git
+```
+
+Copy and modify the .env file
+```
+cp .env.example .env && code .env
+```
+
+Start the container
+```
+docker-compose up -d
+```
+
+Setup the database
+```
+docker-compose exec app php artisan key:generate && docker-compose exec app php artisan config:cache
+```
+```
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
 ## Technical Stack
 
 ### Backend
