@@ -8,7 +8,7 @@
   <title>{{ env('APP_NAME', 'Site') }}</title>
   <link rel="icon" type="image/x-icon" href="/images/logo.svg">
   <!-- Styles / Scripts -->
-  @vite(['resources/css/app.css', 'resources/css/choices.css', 'resources/js/choices.min.js', 'resources/js/app.js'])
+  @vite(['resources/css/app.css', 'resources/css/choices.css', 'resources/js/app.js'])
 </head>
 
 <body class="flex flex-row">
