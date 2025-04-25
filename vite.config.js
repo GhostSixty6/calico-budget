@@ -12,6 +12,7 @@ export default defineConfig({
   ],
   server: {
     cors: true,  
+    https: true,
     hmr: {
       host: 'calico.vault',
     },
